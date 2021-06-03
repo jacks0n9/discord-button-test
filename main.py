@@ -18,17 +18,15 @@ def genEmbed(calc):
 @bot.command()
 async def calc(ctx):
     exit=False
-    empty="Type a calculation, the result will show up here!"
+
     calculation=""
     msg=await ctx.send(
-        embed=genEmbed(empty),
+        embed=genEmbed("0"),
         components = [
-            [Button(label="1"),Button(label="2"),Button(label="3"),Button(label="4")],
-            [Button(label="5"),Button(label="6"),Button(label="7"),Button(label="8")],
-            [Button(label="7"),Button(label="8"),Button(label="9"),Button(label="0")],
-            [Button(label="+"),Button(label="-"),Button(label="*"),Button(label="/")],
-            [Button(label="="),Button(label="❌"),Button(label="Clear"),Button(label=".")]
-
+            [Button(label="1"),Button(label="2"),Button(label="3"),Button(label="4"),Button(label="5")],
+            [Button(label="6"),Button(label="7"),Button(label="8"),Button(label="7"),Button(label="8")],
+            [Button(label="9"),Button(label="0"),Button(label="+"),Button(label="-"),Button(label="*")],
+            [Button(label="/"),Button(label="="),Button(label="❌"),Button(label="Clear"),Button(label=".")]
         ]
     )
 
@@ -46,7 +44,7 @@ async def calc(ctx):
                 exit=True
             elif label=="Clear":
                 calculation=""
-                await msg.edit(embed=genEmbed(empty))
+                await msg.edit(embed=genEmbed("0"))
             else:
                 calculation+=i.component.label
                 await msg.edit(embed=genEmbed(calculation))
