@@ -1,8 +1,8 @@
 from discord.ext.commands import Bot
 from discord import Embed
+import discord
 import json
-from discord_components import DiscordComponents, Button
-
+from discord_components import DiscordComponents, Button,ButtonStyle
 bot=Bot(command_prefix=";")
 with open("config.json",'r') as file:
     config=json.load(file)
@@ -12,8 +12,7 @@ async def on_ready():
     DiscordComponents(bot)
     print(f"Logged in as {bot.user}!")
 def genEmbed(calc):
-    em=Embed(title="Calculator",description=f"```{calc}```")
-    em.set_footer(text="❌ - Stop listening for button presses")
+    em=Embed(title="Calculator",description=f"```-                              {calc}```",color=discord.Color.teal())
     return em
 @bot.command()
 async def calc(ctx):
@@ -24,9 +23,9 @@ async def calc(ctx):
         embed=genEmbed("0"),
         components = [
             [Button(label="1"),Button(label="2"),Button(label="3"),Button(label="4"),Button(label="5")],
-            [Button(label="6"),Button(label="7"),Button(label="8"),Button(label="7"),Button(label="8")],
-            [Button(label="9"),Button(label="0"),Button(label="+"),Button(label="-"),Button(label="*")],
-            [Button(label="/"),Button(label="="),Button(label="❌"),Button(label="Clear"),Button(label=".")]
+            [Button(label="6"),Button(label="7"),Button(label="8"),Button(label="9"),Button(label="8")],
+            [Button(label="9" ),Button(label="0"),Button(label="."),Button(label="Done",style=ButtonStyle.red),Button(label="Clear",style=ButtonStyle.green)],
+            [Button(label="/",style=ButtonStyle.blue),Button(label="+",style=ButtonStyle.blue),Button(label="-",style=ButtonStyle.blue),Button(label="*",style=ButtonStyle.blue),Button(label="=",style=ButtonStyle.blue)]
         ]
     )
 
@@ -40,7 +39,7 @@ async def calc(ctx):
                     await msg.edit(embed=genEmbed(calculation))
                 except:
                     await msg.edit(embed=genEmbed("Invalid calculation!"))
-            elif label=="❌":
+            elif label=="Done":
                 exit=True
             elif label=="Clear":
                 calculation=""
