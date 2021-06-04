@@ -1,4 +1,4 @@
-# Calculator bot with discord buttons
+# Bot to test discord buttons
 ## Just put this in config.json
 ```Json
 {
