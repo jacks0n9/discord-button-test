@@ -1,5 +1,7 @@
+from logging import exception
 from discord.ext.commands import Bot
 from discord import Embed
+from random import choice
 import discord
 import json
 from discord_components import DiscordComponents, Button,ButtonStyle
@@ -11,11 +13,12 @@ with open("config.json",'r') as file:
 async def on_ready():
     DiscordComponents(bot)
     print(f"Logged in as {bot.user}!")
-def genEmbed(calc):
-    em=Embed(title="Calculator",description=f"```-                              {calc}```",color=discord.Color.teal())
-    return em
+
 @bot.command()
 async def calc(ctx):
+    def genEmbed(calc):
+        em=Embed(title="Calculator",description=f"```-                              {calc}```",color=discord.Color.teal())
+        return em
     exit=False
 
     calculation=""
@@ -37,8 +40,9 @@ async def calc(ctx):
                 try:
                     calculation=str(eval(calculation))
                     await msg.edit(embed=genEmbed(calculation))
-                except:
+                except exception as e:
                     await msg.edit(embed=genEmbed("Invalid calculation!"))
+                    print(e)
             elif label=="Done":
                 exit=True
             elif label=="Clear":
@@ -48,6 +52,31 @@ async def calc(ctx):
                 calculation+=i.component.label
                 await msg.edit(embed=genEmbed(calculation))
             await i.respond(type=6)
+
+@bot.command()
+async def clicker(ctx):
+    exit=False
+    num=0
+    print("hi")
+    msg=await ctx.send(
+        "0",
+        components=[
+            [Button(label="+"),Button(label="-"),Button(label="Reset"),Button(label="Done")]
+        ]
+    )
+    while not exit:
+        i=await bot.wait_for("button_click")
+        label=i.component.label
+        if label=="+":
+            num+=1
+        elif label=="-":
+            num-=1
+        elif label=="Reset":
+            num=0
+        elif label=="Done":
+            exit=True
+        await msg.edit(content=str(num))
+        await i.respond(type=6)
 
 
 bot.run(token)
