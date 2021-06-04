@@ -1,7 +1,6 @@
 from logging import exception
 from discord.ext.commands import Bot
 from discord import Embed
-from random import choice
 import discord
 import json
 from discord_components import DiscordComponents, Button,ButtonStyle
@@ -15,9 +14,9 @@ async def on_ready():
     print(f"Logged in as {bot.user}!")
 
 @bot.command()
-async def calc(ctx):
+async def calc(ctx:discord.Message):
     def genEmbed(calc):
-        em=Embed(title="Calculator",description=f"```-                              {calc}```",color=discord.Color.teal())
+        em=Embed(title=f"{ctx.author.display_name}'s Calculator",description=f"```-                              {calc}```",color=discord.Color.teal())
         return em
     exit=False
 
@@ -34,7 +33,7 @@ async def calc(ctx):
 
     while not exit:
         i=await bot.wait_for("button_click")
-        if i.message==msg:
+        if i.user==ctx.author:
             label=i.component.label
             if label=="=":
                 try:
