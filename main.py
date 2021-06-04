@@ -39,9 +39,8 @@ async def calc(ctx:discord.Message):
                 try:
                     calculation=str(eval(calculation))
                     await msg.edit(embed=genEmbed(calculation))
-                except exception as e:
+                except:
                     await msg.edit(embed=genEmbed("Invalid calculation!"))
-                    print(e)
             elif label=="Done":
                 exit=True
             elif label=="Clear":
@@ -51,6 +50,8 @@ async def calc(ctx:discord.Message):
                 calculation+=i.component.label
                 await msg.edit(embed=genEmbed(calculation))
             await i.respond(type=6)
+        else:
+            await i.respond(f"That isn't your calculator! Get your own with {bot.command_prefix}calc")
 
 @bot.command()
 async def clicker(ctx):
@@ -60,7 +61,7 @@ async def clicker(ctx):
     msg=await ctx.send(
         "0",
         components=[
-            [Button(label="+"),Button(label="-"),Button(label="Reset"),Button(label="Done")]
+            [Button(label="+",style=ButtonStyle.green),Button(label="-",style=ButtonStyle.blue),Button(label="Reset"),Button(label="Done",style=ButtonStyle.red)]
         ]
     )
     while not exit:
